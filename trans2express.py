@@ -12,6 +12,8 @@ def run_pipeline():
     if os.path.exists(arguments.output_dir):
         shutil.rmtree(arguments.output_dir)
     os.mkdir(arguments.output_dir)
+    if arguments.output_dir[-1] != '/':
+        arguments.output_dir = arguments.output_dir + '/'
     sys.stdout = Logger(arguments.output_dir)
 
     if arguments.short_reads2 is None:
