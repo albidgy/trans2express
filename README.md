@@ -2,7 +2,9 @@
 
 This pipeline allows transcriptome assembly, aiming to leave one transcript per gene. 64-bit Linux and macOS are supported.
 
-<img alt="fig" height="420" src="/Users/a_kasianova/PycharmProjects/trans2express/img/Fig1.png" width="500"/>
+<div style='justify-content: center'>
+<img src="img/Fig1.png" align='center', width="50%">
+</div>
 
 ### Installation
 ```bash
