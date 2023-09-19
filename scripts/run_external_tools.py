@@ -45,7 +45,7 @@ def run_rnaspades(l_of_short_reads, long_reads, memory_lim, num_threads, common_
 
 
 def run_diamond_blastp(fpath_db_diamond, common_output_dir, output_postfix_dir, d_of_optional_args,
-                       query_fpath, num_threads, output_filename):
+                       query_fpath, num_threads, output_filename, taxon_list=None):
     if common_output_dir[-1] != '/':
         common_output_dir += '/'
 
@@ -54,6 +54,8 @@ def run_diamond_blastp(fpath_db_diamond, common_output_dir, output_postfix_dir, 
     evalue, max_target_seqs, outfmt = d_of_optional_args['evalue'], d_of_optional_args['max_target_seqs'], d_of_optional_args['outfmt']
 
     cmd_diamond_blastp = f'{option_parser.fpath_diamond} blastp --db {fpath_db_diamond} --query {query_fpath} --evalue {evalue} --max-target-seqs {str(max_target_seqs)} --threads {str(num_threads)} --out {diamond_output_dir}{output_filename} --outfmt {outfmt}'
+    if taxon_list is not None:
+        cmd_diamond_blastp += f' --taxonlist {taxon_list}'
     run_external_tool(cmd_diamond_blastp, common_output_dir)
 
     return diamond_output_dir + output_filename

@@ -61,13 +61,14 @@ def run_pipeline():
 
     # 2nd step
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tStart searching homologous proteins by using DIAMOND')
-    diamond_file_for_searching_homologous_prots = run_external_tools.run_diamond_blastp(arguments.diamond_db_for_searching_homologous_prots,
+    diamond_file_for_searching_homologous_prots = run_external_tools.run_diamond_blastp(arguments.diamond_db,
                                                                                         arguments.output_dir,
                                                                                         'diamond_output_for_searching_homologous_prots/',
                                                                                         option_parser.args_for_searching_homologous_prots,
                                                                                         f'{transdecoder_output_dir}/transcripts.fasta.transdecoder_dir/longest_orfs.pep',
                                                                                         arguments.threads,
-                                                                                        'diamond.outfmt6')
+                                                                                        'homologous_compairing.outfmt6',
+                                                                                        taxon_list='33090')
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tCompleted')
 
     # 3rd step
@@ -117,7 +118,7 @@ def run_pipeline():
 
     # run DIAMOND
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Compare translated CDS with nr db by using DIAMOND...')
-    diamond_file_for_removal_foreign_rna = run_external_tools.run_diamond_blastp(arguments.diamond_db_for_removal_foreign_rna,
+    diamond_file_for_removal_foreign_rna = run_external_tools.run_diamond_blastp(arguments.diamond_db,
                                                                                  arguments.output_dir,
                                                                                  'diamond_output_for_removal_foreign_rna/',
                                                                                  option_parser.args_for_removal_foreign_rna,
@@ -130,7 +131,7 @@ def run_pipeline():
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Get final transcriptome assemby...')
     final_assembly_output_dir = arguments.output_dir + 'final_assembly/'
     os.mkdir(final_assembly_output_dir)
-    contaminating_transcripts = extract_longest_iso.is_contaminating_transcript(arguments.diamond_taxonomic_id_for_removal_foreign_rna,
+    contaminating_transcripts = extract_longest_iso.is_contaminating_transcript(arguments.diamond_taxonomic_id,
                                                                                 diamond_file_for_removal_foreign_rna)
     longest_iso_cds = extract_longest_iso.make_final_cds_file(f'{cdhit_output_dir}clust_cds_longest_iso.fasta',
                                                               contaminating_transcripts,

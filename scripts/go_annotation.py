@@ -17,7 +17,7 @@ data = {'method': 'Pannzer',
         'predictor': 'ARGOT',
         'filter_output': 'filter_output',
         'b2g_thresh': '55',
-        'goslim': 'viridiplantae',
+        'goslim': 'None',
         'maxquery': '100000',
         }
 
@@ -75,7 +75,8 @@ def make_full_go_lists(d_of_go_terms, fpath_to_go_tree):
     for key, val in d_of_go_terms.items():
         tmp_go_l = []
         for go_term in val:
-            tmp_go_l += d_of_go_tree[go_term]
+            if go_term in d_of_go_tree.keys():
+                tmp_go_l += d_of_go_tree[go_term]
         d_full_go_lists[key] = list(set(tmp_go_l))
     return d_full_go_lists
 

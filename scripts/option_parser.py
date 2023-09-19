@@ -46,28 +46,20 @@ def parser_arguments():
                               type=int,
                               help='Memory limit in Gb [default: 10]',
                               )
-    general_args.add_argument('--diamond_db_for_searching_homologous_prots',
-                              default=None,
-                              required=True,
-                              help='Path to DIAMOND protein database .dmnd for finding homologous proteins for prediction CDS by TransDecoder',
-                              )
-    general_args.add_argument('--diamond_db_for_removal_foreign_rna',
-                              default=None,
-                              required=True,
-                              help='Path to DIAMOND protein database .dmnd for removing foreign transcripts',
-                              )
-    general_args.add_argument('--diamond_taxonomic_id_for_removal_foreign_rna',
-                              default=None,
-                              required=True,
-                              help='File with taxonomic ids list for DIAMOND protein database',
-                              )
-    general_args.add_argument('--go_tree',
-                              default=None,
-                              required=True,
-                              help='Path to file with broad GO terms',
-                              )
 
     optional_args = parser.add_argument_group(description='Optional arguments')
+    optional_args.add_argument('--diamond_db',
+                              default='db/nr.dmnd',
+                              help='DIAMOND protein database nr.dmnd for finding homologous proteins for prediction CDS by TransDecoder and for removing foreign transcripts. The database is downloaded when you run the install.sh script or you can create your own .dmnd db [default: db/nr.dmnd]',
+                              )
+    optional_args.add_argument('--diamond_taxonomic_id',
+                              default='db/taxonomic_id_to_full_taxonomy.txt',
+                              help='File with taxonomic ids list by nr.dmnd database for removal foreign rna. The file is downloaded when you run the install.sh script [default: db/taxonomic_id_to_full_taxonomy.txt]',
+                              )
+    optional_args.add_argument('--go_tree',
+                              default='db/goTree.txt',
+                              help='File with broad GO terms. The file is downloaded when you run the install.sh script or you can create your own goTree file [default: db/goTree.txt]',
+                              )
     optional_args.add_argument('--min_short_read_length',
                                default=50,
                                type=str,
