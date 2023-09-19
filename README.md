@@ -2,7 +2,7 @@
 
 This pipeline allows transcriptome assembly, aiming to leave one transcript per gene. 64-bit Linux and macOS are supported.
 
-<img src="/Users/a_kasianova/Desktop/arabidopsis_transcriptome_de_novo/RESULTS/Fig1.png" width="500" height="420"/>
+<img alt="fig" height="420" src="/Users/a_kasianova/PycharmProjects/trans2express/img/Fig1.png" width="500"/>
 
 ### Installation
 ```bash
