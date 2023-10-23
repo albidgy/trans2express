@@ -1,4 +1,5 @@
 import argparse
+import os
 import platform
 from datetime import datetime
 
@@ -88,12 +89,12 @@ if platform.system() == 'Darwin':
 elif platform.system() == 'Linux':
     platform_name = 'linux'
 
-fpath_fastp = f'external_libs/fastp/fastp_{platform_name}'
-fpath_porechop = f'external_libs/porechop/porechop_{platform_name}'
-fpath_rnaspades = f'external_libs/spades/spades3.15.5_{platform_name}/bin/rnaspades.py'
-fpath_transdecoder = 'external_libs/transdecoder/transdecoder5.7.1/'
-fpath_cdhit = f'external_libs/cdhit/cd-hit-est_{platform_name}'
-fpath_diamond = f'external_libs/diamond/diamond_{platform_name}'
+fpath_fastp = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/fastp/fastp_{platform_name}'
+fpath_porechop = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/porechop/porechop_{platform_name}'
+fpath_rnaspades = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/spades/spades3.15.5_{platform_name}/bin/rnaspades.py'
+fpath_transdecoder = os.path.abspath(os.path.dirname( __file__ )) + 'external_libs/transdecoder/transdecoder5.7.1/'
+fpath_cdhit = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/cdhit/cd-hit-est_{platform_name}'
+fpath_diamond = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/diamond/diamond_{platform_name}'
 
 args_for_searching_homologous_prots = {'evalue': '0.001',
                                        'max_target_seqs': 1,

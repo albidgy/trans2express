@@ -9,7 +9,7 @@ This pipeline allows transcriptome assembly, aiming to leave one transcript per 
 ### Installation
 ```bash
 wget https://github.com/albidgy/trans2express/releases/download/v0.1.0/v0.1.0.tar.gz
-tar -zxf v0.1.0.tar.gz
+tar -zxf v0.2.0.tar.gz
 cd trans2express/
 ```
 and install python libraries and __required__ databases:
