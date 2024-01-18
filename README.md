@@ -15,11 +15,11 @@ install python libraries and __required__ databases:
 ```bash
 ./install.sh
 ```
-Set pathways to the following tools on your system in the CONFIGURATIONS.txt file. By default, they are all supposed to be in PATH.
+Set pathways to the following tools on your system in the __CONFIGURATIONS.txt__ file. By default, they are all supposed to be in PATH.
 
 ### Command line options
 ```bash
-python trans2express.py [options]
+python3 trans2express.py [options]
 ```
 
 #### General options
@@ -32,7 +32,7 @@ python trans2express.py [options]
 
 `-o / --output_dir ` Output directory. By default, output directory is ../res_trans2express_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND.
 
-`-c/ --config_file` Path to configurations file. By default, configuration file is CONFIGURATIONS.txt.
+`-c/ --config_file ` Path to configurations file. By default, configuration file is CONFIGURATIONS.txt.
 
 `-t / --threads ` Number of threads. By default, is 1.
 
