@@ -1,6 +1,5 @@
 import argparse
 import os
-import platform
 from datetime import datetime
 
 
@@ -32,6 +31,11 @@ def parser_arguments():
                               default='../res_trans2express_' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '/',
                               help='Output directory [default: ../res_trans2express_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND]',
                               )
+    general_args.add_argument('-c',
+                              '--config_file',
+                              default='CONFIGURATIONS.txt',
+                              help='Path to configurations file',
+                              )
     general_args.add_argument('--trim_short_reads',
                               default=False,
                               action='store_true',
@@ -43,9 +47,9 @@ def parser_arguments():
                               help='Add trimming long reads step by using Porechop tool [default: False]',
                               )
     general_args.add_argument('-m', '--memory_lim',
-                              default=10,
+                              default=128,
                               type=int,
-                              help='Memory limit in Gb [default: 10]',
+                              help='Memory limit in Gb [default: 128]',
                               )
 
     optional_args = parser.add_argument_group(description='Optional arguments')
@@ -84,17 +88,18 @@ def parser_arguments():
     return parser.parse_args()
 
 
-if platform.system() == 'Darwin':
-    platform_name = 'macos'
-elif platform.system() == 'Linux':
-    platform_name = 'linux'
+def read_configuration_file(config_file):
+    with open(config_file) as inf:
+        lines = inf.readlines()
+        fpath_fastp = lines[4].strip('\n')
+        fpath_porechop = lines[6].strip('\n')
+        fpath_rnaspades = lines[8].strip('\n')
+        fpath_transdecoder = lines[10].strip('\n')
+        fpath_cdhit = lines[12].strip('\n')
+        fpath_diamond = lines[14].strip('\n')
+    return [fpath_fastp, fpath_porechop, fpath_rnaspades,
+            fpath_transdecoder, fpath_cdhit, fpath_diamond]
 
-fpath_fastp = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/fastp/fastp_{platform_name}'
-fpath_porechop = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/porechop/porechop_{platform_name}'
-fpath_rnaspades = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/spades/spades3.15.5_{platform_name}/bin/rnaspades.py'
-fpath_transdecoder = os.path.abspath(os.path.dirname( __file__ )) + 'external_libs/transdecoder/transdecoder5.7.1/'
-fpath_cdhit = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/cdhit/cd-hit-est_{platform_name}'
-fpath_diamond = os.path.abspath(os.path.dirname( __file__ )) + f'external_libs/diamond/diamond_{platform_name}'
 
 args_for_searching_homologous_prots = {'evalue': '0.001',
                                        'max_target_seqs': 1,

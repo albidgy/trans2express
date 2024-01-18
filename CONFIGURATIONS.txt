@@ -1,0 +1,15 @@
+## Please, set pathways to the following tools on your system.
+## By default, they are all supposed to be in PATH.
+
+## fastp v.0.23.4 or higher pathway
+fastp
+## Porechop v.0.2.4 or higher pathway
+porechop
+##rnaSPAdes v.3.15.5 or higher pathway
+rnaspades.py
+## TransDecoder v.5.7.1 or higher pathway
+./
+## CD-HIT v.4.8.1 or higher pathway
+cd-hit-est
+## DIAMOND v.2.1.8 or higher pathway
+diamond
