@@ -42,11 +42,19 @@ python3 trans2express.py [options]
 
 #### Optional arguments
 
-`--diamond_db ` DIAMOND nr database (nr.dmnd) for finding homologous proteins for prediction CDS by TransDecoder and for removing foreign transcripts. The database is downloaded when you run the install.sh script or you can create your own .dmnd db. By default, is db/nr.dmnd
+`--diamond_db ` DIAMOND nr database (nr.dmnd) for finding homologous proteins for prediction CDS by TransDecoder and for removing foreign transcripts. The database is downloaded when you run the install.sh script or you can create your own .dmnd db. By default, is db/nr.dmnd.
 
-`--diamond_taxonomic_id ` File with taxonomic ids list by nr.dmnd database for removal foreign rna. The file is downloaded when you run the install.sh script. By default, is db/taxonomic_id_to_full_taxonomy.txt
+`--diamond_taxonomic_id ` File with taxonomic ids list by nr.dmnd database for removal foreign rna. The file is downloaded when you run the install.sh script. By default, is db/taxonomic_id_to_full_taxonomy.txt.
 
-`--go_tree ` File with broad GO terms. The file is downloaded when you run the install.sh script, or you can create your own goTree file. By default, is db/goTree.txt
+`--go_tree ` File with broad GO terms. The file is downloaded when you run the install.sh script, or you can create your own goTree file. By default, is db/goTree.txt.
+
+`--min_short_read_length ` Minimum length of short reads for fastp tool. By default, is 50.
+
+`--seq_idy_threshold ` Sequence identity threshold for CD-HIT-EST tool. By default, is 0.98.
+
+`--alignment_type ` Select type of alignment for CD-HIT-EST tool. 0 - local alignment, 1 - global alignment. By default, is 0.
+
+`--subseq_len_matching_cov ` Alignment coverage for the shorter sequence for CD-HIT-EST tool. By default, is 0.6.
 
 ### Output data
 
