@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# install python libraries
-pip install -r requirements.txt
+# install external tools and python packages
+conda env create -f trans2express_env.yml
+conda activate trans2express_env
 
 # download databases
 mkdir db
