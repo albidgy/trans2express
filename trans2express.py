@@ -22,13 +22,10 @@ def run_pipeline():
         l_of_short_reads = [arguments.short_reads1, arguments.short_reads2]
     long_reads = arguments.long_reads
 
-    # read_config_file
-    path_to_tools = option_parser.read_configuration_file(os.path.abspath(arguments.config_file))
-
     # run trimming illumina reads
     if arguments.trim_short_reads:
         print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start trimming short reads by using fastp...')
-        fastp_output_dir = run_external_tools.run_fastp(path_to_tools[0], l_of_short_reads,
+        fastp_output_dir = run_external_tools.run_fastp(l_of_short_reads,
                                                         arguments.output_dir,
                                                         arguments.threads,
                                                         arguments.min_short_read_length)
@@ -38,7 +35,7 @@ def run_pipeline():
     # run trimming long reads
     if arguments.trim_long_reads:
         print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start trimming long reads by using Porechop...')
-        porechop_output_dir = run_external_tools.run_porechop(path_to_tools[1], long_reads,
+        porechop_output_dir = run_external_tools.run_porechop(long_reads,
                                                               arguments.output_dir,
                                                               arguments.threads)
         long_reads = f'{porechop_output_dir}trimmed.{os.path.basename(long_reads)}'
@@ -46,7 +43,7 @@ def run_pipeline():
 
     # run rnaSPAdes
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start transcriptome assembly by using rnaSPAdes...')
-    rnaspades_output_dir = run_external_tools.run_rnaspades(path_to_tools[2], l_of_short_reads,
+    rnaspades_output_dir = run_external_tools.run_rnaspades(l_of_short_reads,
                                                             long_reads,
                                                             arguments.memory_lim,
                                                             arguments.threads,
@@ -58,15 +55,13 @@ def run_pipeline():
 
     # 1st step
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tRun prediction of ORFs')
-    transdecoder_output_dir = run_external_tools.run_transdecoder_longorfs(path_to_tools[3],
-                                                                           arguments.output_dir,
+    transdecoder_output_dir = run_external_tools.run_transdecoder_longorfs(arguments.output_dir,
                                                                            rnaspades_output_dir)
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tORFs predicted')
 
     # 2nd step
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tStart searching homologous proteins by using DIAMOND')
-    diamond_file_for_searching_homologous_prots = run_external_tools.run_diamond_blastp(path_to_tools[5],
-                                                                                        arguments.diamond_db,
+    diamond_file_for_searching_homologous_prots = run_external_tools.run_diamond_blastp(os.path.abspath(arguments.diamond_db),
                                                                                         arguments.output_dir,
                                                                                         'diamond_output_for_searching_homologous_prots/',
                                                                                         option_parser.args_for_searching_homologous_prots,
@@ -78,12 +73,10 @@ def run_pipeline():
 
     # 3rd step
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tRun prediction of CDS and translated CDS')
-    run_external_tools.run_transdecoder_predict(path_to_tools[3],
-                                                arguments.output_dir,
+    run_external_tools.run_transdecoder_predict(arguments.output_dir,
                                                 rnaspades_output_dir,
                                                 transdecoder_output_dir,
-                                                diamond_file_for_searching_homologous_prots,
-                                                )
+                                                diamond_file_for_searching_homologous_prots)
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' \tCDS and translated CDS predicted')
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
 
@@ -102,8 +95,7 @@ def run_pipeline():
 
     # run CD-HIT-EST
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start clustering CDS by using CD-HIT...')
-    cdhit_output_dir = run_external_tools.run_cdhit(path_to_tools[4],
-                                                    arguments.memory_lim,
+    cdhit_output_dir = run_external_tools.run_cdhit(arguments.memory_lim,
                                                     arguments.threads,
                                                     arguments.output_dir,
                                                     extraction_after_transdecoder_output_dir,
@@ -125,8 +117,7 @@ def run_pipeline():
 
     # run DIAMOND
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Compare translated CDS with nr db by using DIAMOND...')
-    diamond_file_for_removal_foreign_rna = run_external_tools.run_diamond_blastp(path_to_tools[5],
-                                                                                 arguments.diamond_db,
+    diamond_file_for_removal_foreign_rna = run_external_tools.run_diamond_blastp(os.path.abspath(arguments.diamond_db),
                                                                                  arguments.output_dir,
                                                                                  'diamond_output_for_removal_foreign_rna/',
                                                                                  option_parser.args_for_removal_foreign_rna,
@@ -139,7 +130,7 @@ def run_pipeline():
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Get final transcriptome assemby...')
     final_assembly_output_dir = arguments.output_dir + 'final_assembly/'
     os.mkdir(final_assembly_output_dir)
-    contaminating_transcripts = extract_longest_iso.is_contaminating_transcript(arguments.diamond_taxonomic_id,
+    contaminating_transcripts = extract_longest_iso.is_contaminating_transcript(os.path.abspath(arguments.diamond_taxonomic_id),
                                                                                 diamond_file_for_removal_foreign_rna)
     longest_iso_cds = extract_longest_iso.make_final_cds_file(f'{cdhit_output_dir}clust_cds_longest_iso.fasta',
                                                               contaminating_transcripts,
@@ -158,7 +149,7 @@ def run_pipeline():
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start GO annotation...')
     go_annotation.run_go_annotation('final.clust_proteins_longest_iso.fasta',
                                     final_assembly_output_dir,
-                                    arguments.go_tree)
+                                    os.path.abspath(arguments.go_tree))
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
     print('Thank you for using Trans2express!\n')
 

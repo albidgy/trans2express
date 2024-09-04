@@ -31,11 +31,6 @@ def parser_arguments():
                               default='../res_trans2express_' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '/',
                               help='Output directory [default: ../res_trans2express_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND]',
                               )
-    general_args.add_argument('-c',
-                              '--config_file',
-                              default='CONFIGURATIONS.txt',
-                              help='Path to configurations file',
-                              )
     general_args.add_argument('--trim_short_reads',
                               default=False,
                               action='store_true',
@@ -86,19 +81,6 @@ def parser_arguments():
                                help='Alignment coverage for the shorter sequence for CD-HIT-EST tool [default 0.6]'
                                )
     return parser.parse_args()
-
-
-def read_configuration_file(config_file):
-    with open(config_file) as inf:
-        lines = inf.readlines()
-        fpath_fastp = lines[4].strip('\n')
-        fpath_porechop = lines[6].strip('\n')
-        fpath_rnaspades = lines[8].strip('\n')
-        fpath_transdecoder = lines[10].strip('\n')
-        fpath_cdhit = lines[12].strip('\n')
-        fpath_diamond = lines[14].strip('\n')
-    return [fpath_fastp, fpath_porechop, fpath_rnaspades,
-            fpath_transdecoder, fpath_cdhit, fpath_diamond]
 
 
 args_for_searching_homologous_prots = {'evalue': '0.001',

@@ -11,15 +11,15 @@ This pipeline allows transcriptome assembly, aiming to leave one transcript per 
 git clone https://github.com/albidgy/trans2express
 cd trans2express/
 ```
-install python libraries and __required__ databases:
+Create conda environment ```trans2express_env``` and install __required__ databases:
 ```bash
-./install.sh
+bash install.sh
 ```
-Set pathways to the following tools on your system in the __CONFIGURATIONS.txt__ file. By default, they are all supposed to be in PATH.
+\* Keep in mind that one of the databases weighs several hundred Gb, so it may take several hours to install. 
 
 ### Command line options
 ```bash
-python3 trans2express.py [options]
+python trans2express.py [options]
 ```
 
 #### General options
@@ -31,8 +31,6 @@ python3 trans2express.py [options]
 `--long_reads ` [__Requied__] Nanopore long reads in fastq or fastq.gz format.
 
 `-o / --output_dir ` Output directory. By default, output directory is ../res_trans2express_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND.
-
-`-c/ --config_file ` Path to configurations file. By default, configuration file is CONFIGURATIONS.txt.
 
 `-t / --threads ` Number of threads. By default, is 1.
 
@@ -68,4 +66,4 @@ As a result of the pipeline's work, the __final_assemly__ main directory is crea
 
 ### Citations
 
-If you use Trans2express in your research, please cite [link](https://doi.org/10.1101/2024.01.11.575187).
+If you use Trans2express in your research, please cite the [paper](https://doi.org/10.1186/s13007-024-01255-7).
