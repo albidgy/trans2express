@@ -1,4 +1,4 @@
-# Trans2express: de novo hybrid transcriptome assembly tool
+# Trans2express v.1.2: de novo hybrid transcriptome assembly tool
 
 This pipeline allows transcriptome assembly, aiming to leave one transcript per gene. 64-bit Linux and macOS are supported.
 

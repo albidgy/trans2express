@@ -20,7 +20,6 @@ def run_pipeline():
         l_of_short_reads = [arguments.short_reads1]
     else:
         l_of_short_reads = [arguments.short_reads1, arguments.short_reads2]
-    long_reads = arguments.long_reads
 
     # run trimming illumina reads
     if arguments.trim_short_reads:
@@ -32,22 +31,32 @@ def run_pipeline():
         l_of_short_reads = [fastp_output_dir + file for file in os.listdir(fastp_output_dir) if file.startswith('trimmed.')]
         print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
 
-    # run trimming long reads
-    if arguments.trim_long_reads:
-        print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start trimming long reads by using Porechop...')
-        porechop_output_dir = run_external_tools.run_porechop(long_reads,
-                                                              arguments.output_dir,
-                                                              arguments.threads)
-        long_reads = f'{porechop_output_dir}trimmed.{os.path.basename(long_reads)}'
-        print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
+    if arguments.long_reads is not None:
+        long_reads = arguments.long_reads
+        # run trimming long reads
+        if arguments.trim_long_reads:
+            print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start trimming long reads by using Porechop...')
+            porechop_output_dir = run_external_tools.run_porechop(long_reads,
+                                                                  arguments.output_dir,
+                                                                  arguments.threads)
+            long_reads = f'{porechop_output_dir}trimmed.{os.path.basename(long_reads)}'
+            print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
 
-    # run rnaSPAdes
-    print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start transcriptome assembly by using rnaSPAdes...')
-    rnaspades_output_dir = run_external_tools.run_rnaspades(l_of_short_reads,
-                                                            long_reads,
-                                                            arguments.memory_lim,
-                                                            arguments.threads,
-                                                            arguments.output_dir)
+        # run rnaSPAdes
+        print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start transcriptome assembly by using rnaSPAdes...')
+        rnaspades_output_dir = run_external_tools.run_rnaspades(l_of_short_reads,
+                                                                arguments.memory_lim,
+                                                                arguments.threads,
+                                                                arguments.output_dir,
+                                                                long_reads)
+
+    else:
+        # run rnaSPAdes
+        print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Start transcriptome assembly by using rnaSPAdes...')
+        rnaspades_output_dir = run_external_tools.run_rnaspades(l_of_short_reads,
+                                                                arguments.memory_lim,
+                                                                arguments.threads,
+                                                                arguments.output_dir)
     print(datetime.now().strftime('%Y.%m.%d %H:%M:%S') + ' Done\n')
 
     # run TransDecoder + DIAMOND

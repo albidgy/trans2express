@@ -28,9 +28,12 @@ def run_porechop(long_reads, common_output_dir, num_threads):
     return porechop_output_dir
 
 
-def run_rnaspades(l_of_short_reads, long_reads, memory_lim, num_threads, common_output_dir):
+def run_rnaspades(l_of_short_reads, memory_lim, num_threads, common_output_dir, long_reads=None):
     rnaspades_output_dir = common_output_dir + 'rnaspades_output/'
-    cmd_rna_spades = ['rnaspades.py', '-m', str(memory_lim), '-t', str(num_threads), '--nanopore', long_reads, '-o', rnaspades_output_dir]
+    cmd_rna_spades = ['rnaspades.py', '-m', str(memory_lim), '-t', str(num_threads), '-o', rnaspades_output_dir]
+    if long_reads is not None:
+        cmd_rna_spades.extend(['--nanopore', long_reads])
+
     if len(l_of_short_reads) == 1:
         flag_prefix = '-s'
     else:

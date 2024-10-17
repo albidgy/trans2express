@@ -1,6 +1,8 @@
 import argparse
-import os
 from datetime import datetime
+
+
+VERSION = 'v. 1.2'
 
 
 def parser_arguments():
@@ -17,7 +19,7 @@ def parser_arguments():
                               help='Short reads 2 in fastq or fastq.gz format. If you have single-end reads do not specify this parameter',
                               )
     general_args.add_argument('--long_reads',
-                              required=True,
+                              default=None,
                               help='Long reads in fastq or fastq.gz format',
                               )
     general_args.add_argument('-t',
@@ -46,6 +48,10 @@ def parser_arguments():
                               type=int,
                               help='Memory limit in Gb [default: 128]',
                               )
+    general_args.add_argument('-v', '--version',
+                              action='version',
+                              version=f'trans2express {VERSION}',
+                              help='Show version of tool')
 
     optional_args = parser.add_argument_group(description='Optional arguments')
     optional_args.add_argument('--diamond_db',
